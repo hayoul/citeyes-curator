@@ -1,36 +1,428 @@
-Act as an expert UI/UX designer and front-end developer. Build a modern, conversion-focused single-page website for a highly niche consulting business called "East Bay Smart Home Design". 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>East Bay Smart Home Design | Premium Tech Blueprints</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <style>
+        /* CSS VARIABLES - THEME COLORS */
+        :root {
+            --oakland-green: #2c4c38;
+            --warm-cream: #fbf9f6;
+            --rich-charcoal: #2b2b2b;
+            --muted-gold: #c5a059;
+            --white: #ffffff;
+            --radius-lg: 32px;
+            --radius-md: 16px;
+            --radius-pill: 50px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
 
-The target audience consists of affluent, tech-forward, but busy homeowners in Oakland and Berkeley, California (neighborhoods like Rockridge, Montclair, Grand Lake). 
+        /* RESET & BASE */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--warm-cream);
+            color: var(--rich-charcoal);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
 
-CRITICAL BUSINESS CONSTRAINT TO REFLECT IN TEXT: 
-The business does NOT physically install hardware, drill walls, or configure low-voltage wiring. This is strictly a "Smart Home Product Planner & Curator" service. The deliverable is a custom "Smart Home Tech Blueprint" (a PDF shopping list and compatibility map) that clients can hand to their own handyman/contractor or use themselves. This ensures the business stays low-maintenance and under 2 hours of work per week.
+        h1, h2, h3 { font-family: 'Playfair Display', serif; font-weight: 700; }
+        a { text-decoration: none; color: inherit; }
 
-DESIGN AESTHETIC & STYLE:
-- Style: Mid-century modern meets clean tech. Clean, minimalist layout with high contrast, plenty of whitespace, and an elegant vibe.
-- Color Palette: Deep Oakland Forest Green (#2c4c38) for headers/accents, Warm Cream (#fbf9f6) for the main body background, Rich Charcoal (#2b2b2b) for primary text, and a Muted Gold (#c5a059) for highlights/ticks.
-- Fonts: Crisp, modern sans-serif.
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
 
-WEBSITE STRUCTURE (Single Page):
-1. HERO SECTION:
-   - Catchy, clear headline emphasizing clarity over technical confusion (e.g., "Smart Home Clarity Without the Headaches").
-   - Subheadline specifying the geographic area (Oakland & Berkeley) and the core value proposition (unbiased product matching, zero installation stress).
-   - A clear Call to Action (CTA) button that anchors down to the Inquiry Form.
+        /* NAVIGATION */
+        nav {
+            padding: 2.5rem 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-weight: 600;
+            letter-spacing: -0.5px;
+            font-size: 1.1rem;
+            color: var(--oakland-green);
+            text-transform: uppercase;
+        }
 
-2. THE "WHY" SECTION (Pain Points):
-   - Briefly contrast the headache of buying incompatible smart devices with the ease of having a master architectural tech plan. Highlight why an independent consultant is better than a contractor who will lock them into a single brand.
+        /* HERO SECTION */
+        .hero {
+            padding: 4rem 0 8rem;
+            text-align: center;
+        }
+        .hero h1 {
+            font-size: clamp(2.8rem, 6vw, 4.5rem);
+            line-height: 1.05;
+            margin-bottom: 1.5rem;
+            color: var(--oakland-green);
+        }
+        .hero p {
+            font-size: 1.3rem;
+            max-width: 650px;
+            margin: 0 auto 3rem;
+            opacity: 0.85;
+            font-weight: 300;
+        }
+        .btn {
+            display: inline-block;
+            background-color: var(--oakland-green);
+            color: var(--warm-cream);
+            padding: 1.3rem 2.8rem;
+            border-radius: var(--radius-pill);
+            font-weight: 600;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            box-shadow: 0 10px 20px rgba(44, 76, 56, 0.15);
+        }
+        .btn:hover {
+            background-color: var(--muted-gold);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(197, 160, 89, 0.3);
+        }
 
-3. THE SERVICE & PRICE CARD (Single Core Package):
-   - Title: "The Smart Home Tech Blueprint"
-   - Price: $250 (Flat Fee)
-   - Bulleted list of deliverables: Ecosystem Match (Apple HomeKit, Google Home, Alexa/Matter), Custom Product Shopping List, Placement & Compatibility Map, Privacy & Data Security Strategy.
-   - Fine print below price: Explaining it includes a 45-minute local walkthrough/video consultation and that we do not sell or install hardware, ensuring 100% unbiased advice.
+        /* WHY SECTION */
+        .why {
+            padding: 8rem 0;
+            background-color: var(--white);
+            border-radius: var(--radius-lg);
+            margin: 0 1rem;
+        }
+        .section-title {
+            text-align: center;
+            margin-bottom: 5rem;
+        }
+        .section-title h2 { font-size: 2.8rem; color: var(--oakland-green); }
+        
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 4rem;
+        }
+        .why-card h3 {
+            margin-bottom: 1.2rem;
+            color: var(--muted-gold);
+            font-size: 1.5rem;
+        }
+        .why-card p { font-size: 1.05rem; opacity: 0.8; }
 
-4. LEAD CAPTURE / INQUIRY FORM:
-   - A clean, well-spaced form that qualifies clients before a call.
-   - Fields required: Name, Email, Oakland/East Bay Neighborhood, Checkboxes for Areas of Focus (Security, Lighting, Climate, Multi-room Audio), Dropdown for Preferred Ecosystem (Apple, Google, Amazon, Not Sure), and a Textarea for Home/Goals description.
-   - High-contrast submit button.
+        /* SERVICE CARD */
+        .pricing { padding: 8rem 0; }
+        .service-card {
+            background: var(--oakland-green);
+            color: var(--warm-cream);
+            padding: 5rem 4rem;
+            border-radius: var(--radius-lg);
+            max-width: 850px;
+            margin: 0 auto;
+            position: relative;
+            box-shadow: 0 40px 80px rgba(44, 76, 56, 0.25);
+        }
+        .price-tag {
+            font-size: 4rem;
+            font-family: 'Playfair Display', serif;
+            display: block;
+            margin: 1.5rem 0;
+            color: var(--muted-gold);
+        }
+        .service-card ul { margin: 2.5rem 0; }
+        .service-card li {
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(251, 249, 246, 0.15);
+            display: flex;
+            align-items: center;
+            font-size: 1.1rem;
+        }
+        .service-card li::before {
+            content: '→';
+            color: var(--muted-gold);
+            margin-right: 15px;
+            font-weight: bold;
+        }
+        .disclaimer-text {
+            font-size: 0.9rem;
+            opacity: 0.6;
+            margin-top: 3rem;
+            line-height: 1.6;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 2rem;
+        }
 
-5. FOOTER:
-   - Include a clear legal disclaimer: "East Bay Smart Home Design provides independent technology consulting. We are not a licensed C-7 low-voltage contractor and do not provide physical electrical or hardware installation services."
+        /* FORM SECTION */
+        .inquiry { padding: 8rem 0; }
+        .form-container {
+            max-width: 650px;
+            margin: 0 auto;
+            background: white;
+            padding: 4rem;
+            border-radius: var(--radius-lg);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.03);
+        }
+        .form-group { margin-bottom: 1.8rem; position: relative; }
+        label { display: block; margin-bottom: 0.7rem; font-weight: 600; font-size: 0.9rem; color: var(--oakland-green); }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 1.1rem;
+            border: 1px solid #e0e0e0;
+            border-radius: var(--radius-md);
+            font-family: inherit;
+            background-color: #fcfcfc;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+        input:focus { outline: none; border-color: var(--muted-gold); background: white; }
+        
+        /* AUTOCOMPLETE DROPDOWN */
+        .autocomplete-results {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border-radius: var(--radius-md);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            z-index: 100;
+            margin-top: 5px;
+            max-height: 250px;
+            overflow-y: auto;
+            display: none;
+            border: 1px solid #eee;
+        }
+        .autocomplete-item {
+            padding: 12px 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            border-bottom: 1px solid #f9f9f9;
+        }
+        .autocomplete-item:hover { background-color: var(--warm-cream); color: var(--oakland-green); }
 
-Please output the clean, responsive, production-ready code with embedded CSS.
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 0.8rem;
+        }
+        .checkbox-item { 
+            display: flex; 
+            align-items: center; 
+            font-size: 0.95rem; 
+            background: #f8f8f8;
+            padding: 10px 15px;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+        }
+        .checkbox-item input { width: auto; margin-right: 12px; }
+
+        /* FOOTER */
+        footer {
+            padding: 6rem 0;
+            background: #f0eee9;
+            text-align: center;
+        }
+        .footer-legal {
+            max-width: 700px;
+            margin: 2rem auto 0;
+            font-size: 0.8rem;
+            color: #888;
+            line-height: 1.8;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            .service-card, .form-container { padding: 2.5rem 1.5rem; border-radius: var(--radius-md); }
+            .checkbox-group { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <nav>
+            <div class="logo">East Bay Smart Home Design</div>
+            <a href="#inquiry" style="font-weight: 600; font-size: 0.85rem; letter-spacing: 1px; color: var(--muted-gold);">GET STARTED</a>
+        </nav>
+    </div>
+
+    <header class="hero">
+        <div class="container">
+            <h1>Smart Home Clarity <br>Without the Headaches.</h1>
+            <p>Bespoke technology curation for Oakland and Berkeley homeowners. We design the system, you keep your sanity.</p>
+            <a href="#inquiry" class="btn">Request Your Tech Blueprint</a>
+        </div>
+    </header>
+
+    <section class="why">
+        <div class="container">
+            <div class="section-title">
+                <h2>The Strategy of Independent Curation</h2>
+            </div>
+            <div class="grid-3">
+                <div class="why-card">
+                    <h3>Unbiased Advice</h3>
+                    <p>Most installers are dealers for specific brands. We sell zero hardware, meaning our only goal is finding the best tech for your specific architecture.</p>
+                </div>
+                <div class="why-card">
+                    <h3>One Integrated App</h3>
+                    <p>We eliminate "software clutter." Whether you prefer Apple HomeKit, Google, or Alexa, we ensure every device works in one unified interface.</p>
+                </div>
+                <div class="why-card">
+                    <h3>Future-Proofing</h3>
+                    <p>The "Blueprint" includes Matter-ready devices and local-control privacy standards, ensuring your home stays smart for the next decade.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="plan" class="pricing">
+        <div class="container">
+            <div class="service-card">
+                <span style="text-transform: uppercase; letter-spacing: 3px; font-size: 0.75rem; color: var(--muted-gold); font-weight: 600;">The Signature Package</span>
+                <h2>The Smart Home Tech Blueprint</h2>
+                <span class="price-tag">$250 <span style="font-size: 0.9rem; color: white; opacity: 0.5; font-family: 'Inter'; letter-spacing: 1px;">FLAT FEE</span></span>
+                
+                <ul>
+                    <li><strong>Ecosystem Matching:</strong> Apple Home, Google, or Alexa strategy</li>
+                    <li><strong>Curated Shopping List:</strong> Vetted hardware links for your budget</li>
+                    <li><strong>Placement Map:</strong> PDF layout for all sensors, hubs, and nodes</li>
+                    <li><strong>Privacy Audit:</strong> Data security and network isolation plan</li>
+                </ul>
+
+                <p style="font-size: 1.1rem; font-weight: 300;">Includes a 45-minute local walkthrough or virtual consultation.</p>
+                
+                <div class="disclaimer-text">
+                    <strong>CONSULTING ONLY:</strong> We are product curators, not contractors. This service does not include physical installation, drilling, or wiring. The result is a professional blueprint you or your contractor can execute with 100% confidence.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="inquiry" class="inquiry">
+        <div class="container">
+            <div class="section-title">
+                <h2>Start Your Blueprint</h2>
+                <p>Ready to streamline your home? Let's begin.</p>
+            </div>
+            
+            <div class="form-container">
+                <form id="leadForm">
+                    <div class="form-group">
+                        <label>Name</label>
+                        <input type="text" placeholder="Your name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" placeholder="email@address.com" required>
+                    </div>
+
+                    <!-- ADDRESS AUTOCOMPLETE FIELD -->
+                    <div class="form-group">
+                        <label>Property Address (Oakland & Berkeley)</label>
+                        <input type="text" id="addressInput" placeholder="Start typing your address..." autocomplete="off" required>
+                        <div id="autocomplete-list" class="autocomplete-results"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Project Priorities</label>
+                        <div class="checkbox-group">
+                            <label class="checkbox-item"><input type="checkbox"> Security</label>
+                            <label class="checkbox-item"><input type="checkbox"> Lighting</label>
+                            <label class="checkbox-item"><input type="checkbox"> Climate</label>
+                            <label class="checkbox-item"><input type="checkbox"> Audio/Visual</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Preferred Ecosystem</label>
+                        <select>
+                            <option>Apple HomeKit</option>
+                            <option>Google Home</option>
+                            <option>Amazon Alexa / Matter</option>
+                            <option>Unsure / Need Advice</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn" style="width: 100%; margin-top: 1.5rem;">Send Inquiry</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="logo" style="margin-bottom: 1rem;">East Bay Smart Home Design</div>
+            <p style="opacity: 0.6;">Specializing in Rockridge, Montclair, and the Berkeley Hills.</p>
+            <div class="footer-legal">
+                <p>East Bay Smart Home Design provides independent technology consulting. We are not a licensed C-7 low-voltage contractor and do not provide physical electrical or hardware installation services. All "Blueprints" are intended as architectural guides for homeowner or third-party professional implementation.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const addressInput = document.getElementById('addressInput');
+        const resultsContainer = document.getElementById('autocomplete-list');
+        let debounceTimer;
+
+        addressInput.addEventListener('input', function() {
+            clearTimeout(debounceTimer);
+            const query = this.value;
+
+            if (query.length < 4) {
+                resultsContainer.style.display = 'none';
+                return;
+            }
+
+            debounceTimer = setTimeout(() => {
+                // We use Photon API (OpenStreetMap)
+                // lon -122.27, lat 37.87 is the Berkeley/Oakland center for bias
+                const url = `https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&lat=37.8715&lon=-122.2730&limit=5`;
+
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        resultsContainer.innerHTML = '';
+                        if (data.features.length > 0) {
+                            resultsContainer.style.display = 'block';
+                            data.features.forEach(feature => {
+                                const props = feature.properties;
+                                const addressLabel = [props.name, props.street, props.city, props.state]
+                                    .filter(Boolean)
+                                    .join(', ');
+                                
+                                const div = document.createElement('div');
+                                div.classList.add('autocomplete-item');
+                                div.textContent = addressLabel;
+                                div.addEventListener('click', () => {
+                                    addressInput.value = addressLabel;
+                                    resultsContainer.style.display = 'none';
+                                });
+                                resultsContainer.appendChild(div);
+                            });
+                        } else {
+                            resultsContainer.style.display = 'none';
+                        }
+                    });
+            }, 300);
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            if (e.target !== addressInput) {
+                resultsContainer.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>

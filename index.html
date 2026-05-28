@@ -378,7 +378,7 @@
                 <p style="font-size: 1.1rem; font-weight: 300;">Includes a 45-minute local walkthrough or virtual consultation.</p>
                 
                 <div class="disclaimer-text">
-                    <strong>CONSULTING ONLY:</strong> We are product curators, not contractors. This service does not include physical installation, drilling, or wiring. The result is a professional blueprint document only.
+                    <strong>CONSULTING ONLY:</strong> We are product curators, not contractors. This service does not include physical installation, drilling, or wiring. The result is a professional blueprint document you can take to any installer.
                 </div>
             </div>
         </div>
@@ -457,7 +457,7 @@
             <div class="logo" style="margin-bottom: 1rem;">East Bay Smart Home Design</div>
             <p style="opacity: 0.6;">Specializing in Rockridge, Montclair, and the Berkeley Hills.</p>
             <div class="footer-legal">
-                <p>East Bay Smart Home Design provides independent technology consulting. We are not a licensed C-7 low-voltage contractor and do not provide physical electrical or hardware installation services.</p>
+                <p>East Bay Smart Home Design provides independent technology consulting. We are not a licensed C-7 low-voltage contractor and do not provide physical electrical or hardware installation services. Curations and recommendations are provided for informational purposes only.</p>
             </div>
         </div>
     </footer>
@@ -602,16 +602,13 @@
                 },
                 body: params.toString()
             })
-            .then(response => {
-                if (response.ok) {
-                    formFeedback.classList.add('success');
-                    formFeedback.textContent = '✓ Message sent! We\'ll be in touch soon.';
-                    leadForm.reset();
-                    selectedAddress = false;
-                    resultsContainer.style.display = 'none';
-                } else {
-                    throw new Error('Form submission failed');
-                }
+            .then(response => response.json())
+            .then(data => {
+                formFeedback.classList.add('success');
+                formFeedback.textContent = '✓ Message sent! We\'ll be in touch soon.';
+                leadForm.reset();
+                selectedAddress = false;
+                resultsContainer.style.display = 'none';
             })
             .catch(error => {
                 console.error('Form submission error:', error);

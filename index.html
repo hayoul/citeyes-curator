@@ -316,46 +316,60 @@
             </div>
             
             <div class="form-container">
-                <form id="leadForm">
-                    <div class="form-group">
-                        <label>Name</label>
-                        <input type="text" placeholder="Your name" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Email</label>
-                        <input type="email" placeholder="email@address.com" required>
-                    </div>
+<!-- UPDATED FORM SECTION -->
+<form action="https://formspree.io/f/xlgvakjw" method="POST">
+    <div class="form-group">
+        <label>Name</label>
+        <!-- Added name="name" -->
+        <input type="text" name="name" placeholder="Your name" required>
+    </div>
+    
+    <div class="form-group">
+        <label>Email</label>
+        <!-- Added name="email" -->
+        <input type="email" name="_replyto" placeholder="email@address.com" required>
+    </div>
 
-                    <!-- ADDRESS AUTOCOMPLETE FIELD -->
-                    <div class="form-group">
-                        <label>Property Address (Oakland & Berkeley)</label>
-                        <input type="text" id="addressInput" placeholder="Start typing your address..." autocomplete="off" required>
-                        <div id="autocomplete-list" class="autocomplete-results"></div>
-                    </div>
+    <div class="form-group">
+        <label>Property Address (Oakland & Berkeley)</label>
+        <!-- Added name="address" -->
+        <input type="text" id="addressInput" name="address" placeholder="Start typing your address..." autocomplete="off" required>
+        <div id="autocomplete-list" class="autocomplete-results"></div>
+    </div>
 
-                    <div class="form-group">
-                        <label>Project Priorities</label>
-                        <div class="checkbox-group">
-                            <label class="checkbox-item"><input type="checkbox"> Security</label>
-                            <label class="checkbox-item"><input type="checkbox"> Lighting</label>
-                            <label class="checkbox-item"><input type="checkbox"> Climate</label>
-                            <label class="checkbox-item"><input type="checkbox"> Audio/Visual</label>
-                        </div>
-                    </div>
+    <div class="form-group">
+        <label>Project Priorities</label>
+        <div class="checkbox-group">
+            <!-- Added name="priorities" -->
+            <label class="checkbox-item"><input type="checkbox" name="priorities" value="Security"> Security</label>
+            <label class="checkbox-item"><input type="checkbox" name="priorities" value="Lighting"> Lighting</label>
+            <label class="checkbox-item"><input type="checkbox" name="priorities" value="Climate"> Climate</label>
+            <label class="checkbox-item"><input type="checkbox" name="priorities" value="Audio"> Audio/Visual</label>
+        </div>
+    </div>
 
-                    <div class="form-group">
-                        <label>Preferred Ecosystem</label>
-                        <select>
-                            <option>Apple HomeKit</option>
-                            <option>Google Home</option>
-                            <option>Amazon Alexa / Matter</option>
-                            <option>Unsure / Need Advice</option>
-                        </select>
-                    </div>
+    <div class="form-group">
+        <label>Preferred Ecosystem</label>
+        <!-- Added name="ecosystem" -->
+        <select name="ecosystem">
+            <option value="Apple">Apple HomeKit</option>
+            <option value="Google">Google Home</option>
+            <option value="Amazon">Amazon Alexa / Matter</option>
+            <option value="Unsure">Unsure / Need Advice</option>
+        </select>
+    </div>
 
-                    <button type="submit" class="btn" style="width: 100%; margin-top: 1.5rem;">Send Inquiry</button>
-                </form>
+    <div class="form-group">
+        <label>Message/Goals</label>
+        <!-- Added name="message" -->
+        <textarea name="message" rows="4" placeholder="Tell us about your home..."></textarea>
+    </div>
+
+    <!-- This hidden field prevents spam bots from filling out your form -->
+    <input type="text" name="_gotcha" style="display:none">
+
+    <button type="submit" class="btn" style="width: 100%; margin-top: 1.5rem;">Send Inquiry</button>
+</form>
             </div>
         </div>
     </section>

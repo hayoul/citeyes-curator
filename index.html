@@ -180,6 +180,9 @@
             position: relative;
             z-index: 1;
         }
+        .form-group.address-input-group {
+            z-index: 50;
+        }
         label { display: block; margin-bottom: 0.7rem; font-weight: 600; font-size: 0.9rem; color: var(--oakland-green); }
         
         input, select, textarea {
@@ -240,7 +243,7 @@
             background: white;
             border-radius: var(--radius-md);
             box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            z-index: 100;
+            z-index: 1000;
             margin-top: 5px;
             max-height: 250px;
             overflow-y: auto;
@@ -267,6 +270,12 @@
             text-align: center;
         }
 
+        fieldset {
+            border: none;
+            padding: 0;
+            margin: 0;
+        }
+
         .checkbox-group {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -277,14 +286,14 @@
             display: flex; 
             align-items: center; 
             font-size: 0.95rem; 
-            background: #f8f8f8;
-            padding: 10px 15px;
-            border-radius: var(--radius-md);
+            background: transparent;
+            padding: 10px 0;
+            border-radius: 0;
             cursor: pointer;
             transition: var(--transition);
         }
         .checkbox-item:hover {
-            background: #f0f0f0;
+            background: transparent;
         }
         .checkbox-item input { 
             width: auto; 
@@ -369,7 +378,7 @@
                 <p style="font-size: 1.1rem; font-weight: 300;">Includes a 45-minute local walkthrough or virtual consultation.</p>
                 
                 <div class="disclaimer-text">
-                    <strong>CONSULTING ONLY:</strong> We are product curators, not contractors. This service does not include physical installation, drilling, or wiring. The result is a professional blueprint that you can take to licensed installers.
+                    <strong>CONSULTING ONLY:</strong> We are product curators, not contractors. This service does not include physical installation, drilling, or wiring. The result is a professional blueprint document only.
                 </div>
             </div>
         </div>
@@ -398,9 +407,9 @@
                     </div>
 
                     <!-- ADDRESS AUTOCOMPLETE FIELD -->
-                    <div class="form-group">
+                    <div class="form-group address-input-group">
                         <label for="addressInput">Property Address (Oakland & Berkeley)</label>
-                        <input type="text" id="addressInput" name="address" placeholder="Start typing your address..." autocomplete="off" required aria-autocomplete="list" aria-controls="autocomplete-list" role="combobox">
+                        <input type="text" id="addressInput" name="address" placeholder="Start typing your address..." autocomplete="off" required aria-autocomplete="list" aria-controls="autocomplete-list">
                         <div id="autocomplete-list" class="autocomplete-results" role="listbox"></div>
                         <span class="error-message">Please select an address from the suggestions</span>
                     </div>
@@ -448,7 +457,7 @@
             <div class="logo" style="margin-bottom: 1rem;">East Bay Smart Home Design</div>
             <p style="opacity: 0.6;">Specializing in Rockridge, Montclair, and the Berkeley Hills.</p>
             <div class="footer-legal">
-                <p>East Bay Smart Home Design provides independent technology consulting. We are not a licensed C-7 low-voltage contractor and do not provide physical electrical or hardware installation labor.</p>
+                <p>East Bay Smart Home Design provides independent technology consulting. We are not a licensed C-7 low-voltage contractor and do not provide physical electrical or hardware installation services.</p>
             </div>
         </div>
     </footer>
@@ -582,11 +591,16 @@
             const originalText = submitBtn.textContent;
             submitBtn.textContent = 'Sending...';
 
-            // Submit form programmatically
+            // Submit form using URLSearchParams for proper Formspree compatibility
             const formData = new FormData(leadForm);
+            const params = new URLSearchParams(formData);
+            
             fetch(leadForm.action, {
                 method: 'POST',
-                body: formData
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: params.toString()
             })
             .then(response => {
                 if (response.ok) {

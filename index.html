@@ -15,6 +15,8 @@
             --rich-charcoal: #2b2b2b;
             --muted-gold: #c5a059;
             --white: #ffffff;
+            --error-red: #d32f2f;
+            --success-green: #388e3c;
             --radius-lg: 32px;
             --radius-md: 16px;
             --radius-pill: 50px;
@@ -86,10 +88,14 @@
             font-size: 1rem;
             box-shadow: 0 10px 20px rgba(44, 76, 56, 0.15);
         }
-        .btn:hover {
+        .btn:hover:not(:disabled) {
             background-color: var(--muted-gold);
             transform: translateY(-3px);
             box-shadow: 0 15px 30px rgba(197, 160, 89, 0.3);
+        }
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
         }
 
         /* WHY SECTION */
@@ -169,7 +175,11 @@
             border-radius: var(--radius-lg);
             box-shadow: 0 20px 40px rgba(0,0,0,0.03);
         }
-        .form-group { margin-bottom: 1.8rem; position: relative; }
+        .form-group { 
+            margin-bottom: 1.8rem; 
+            position: relative;
+            z-index: 1;
+        }
         label { display: block; margin-bottom: 0.7rem; font-weight: 600; font-size: 0.9rem; color: var(--oakland-green); }
         
         input, select, textarea {
@@ -182,7 +192,44 @@
             font-size: 1rem;
             transition: var(--transition);
         }
-        input:focus { outline: none; border-color: var(--muted-gold); background: white; }
+        input:focus, select:focus, textarea:focus { 
+            outline: none; 
+            border-color: var(--muted-gold); 
+            background: white; 
+        }
+        
+        /* FORM ERROR & SUCCESS STATES */
+        .form-error {
+            border-color: var(--error-red) !important;
+            background-color: #ffebee !important;
+        }
+        .error-message {
+            color: var(--error-red);
+            font-size: 0.8rem;
+            margin-top: 0.4rem;
+            display: none;
+        }
+        .form-group.error .error-message {
+            display: block;
+        }
+        .form-feedback {
+            padding: 1rem;
+            border-radius: var(--radius-md);
+            margin-bottom: 1.5rem;
+            display: none;
+            text-align: center;
+            font-weight: 600;
+        }
+        .form-feedback.success {
+            background-color: #e8f5e9;
+            color: var(--success-green);
+            display: block;
+        }
+        .form-feedback.error {
+            background-color: #ffebee;
+            color: var(--error-red);
+            display: block;
+        }
         
         /* AUTOCOMPLETE DROPDOWN */
         .autocomplete-results {
@@ -205,8 +252,20 @@
             cursor: pointer;
             font-size: 0.9rem;
             border-bottom: 1px solid #f9f9f9;
+            transition: var(--transition);
         }
-        .autocomplete-item:hover { background-color: var(--warm-cream); color: var(--oakland-green); }
+        .autocomplete-item:hover, 
+        .autocomplete-item:focus {
+            background-color: var(--warm-cream); 
+            color: var(--oakland-green);
+            outline: none;
+        }
+        .autocomplete-item-error {
+            padding: 12px 20px;
+            font-size: 0.9rem;
+            color: #999;
+            text-align: center;
+        }
 
         .checkbox-group {
             display: grid;
@@ -222,8 +281,16 @@
             padding: 10px 15px;
             border-radius: var(--radius-md);
             cursor: pointer;
+            transition: var(--transition);
         }
-        .checkbox-item input { width: auto; margin-right: 12px; }
+        .checkbox-item:hover {
+            background: #f0f0f0;
+        }
+        .checkbox-item input { 
+            width: auto; 
+            margin-right: 12px;
+            cursor: pointer;
+        }
 
         /* FOOTER */
         footer {
@@ -302,7 +369,7 @@
                 <p style="font-size: 1.1rem; font-weight: 300;">Includes a 45-minute local walkthrough or virtual consultation.</p>
                 
                 <div class="disclaimer-text">
-                    <strong>CONSULTING ONLY:</strong> We are product curators, not contractors. This service does not include physical installation, drilling, or wiring. The result is a professional blueprint you or your contractor can execute with 100% confidence.
+                    <strong>CONSULTING ONLY:</strong> We are product curators, not contractors. This service does not include physical installation, drilling, or wiring. The result is a professional blueprint that you can take to licensed installers.
                 </div>
             </div>
         </div>
@@ -316,60 +383,62 @@
             </div>
             
             <div class="form-container">
-<!-- UPDATED FORM SECTION -->
-<form action="https://formspree.io/f/xlgvakjw" method="POST">
-    <div class="form-group">
-        <label>Name</label>
-        <!-- Added name="name" -->
-        <input type="text" name="name" placeholder="Your name" required>
-    </div>
-    
-    <div class="form-group">
-        <label>Email</label>
-        <!-- Added name="email" -->
-        <input type="email" name="_replyto" placeholder="email@address.com" required>
-    </div>
+                <div id="formFeedback" class="form-feedback"></div>
+                <form id="leadForm" action="https://formspree.io/f/xlgvakjw" method="POST" novalidate>
+                    <div class="form-group">
+                        <label for="formName">Name</label>
+                        <input type="text" id="formName" name="name" placeholder="Your name" required>
+                        <span class="error-message">Name is required</span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="formEmail">Email</label>
+                        <input type="email" id="formEmail" name="_replyto" placeholder="email@address.com" required>
+                        <span class="error-message">Please enter a valid email address</span>
+                    </div>
 
-    <div class="form-group">
-        <label>Property Address (Oakland & Berkeley)</label>
-        <!-- Added name="address" -->
-        <input type="text" id="addressInput" name="address" placeholder="Start typing your address..." autocomplete="off" required>
-        <div id="autocomplete-list" class="autocomplete-results"></div>
-    </div>
+                    <!-- ADDRESS AUTOCOMPLETE FIELD -->
+                    <div class="form-group">
+                        <label for="addressInput">Property Address (Oakland & Berkeley)</label>
+                        <input type="text" id="addressInput" name="address" placeholder="Start typing your address..." autocomplete="off" required aria-autocomplete="list" aria-controls="autocomplete-list" role="combobox">
+                        <div id="autocomplete-list" class="autocomplete-results" role="listbox"></div>
+                        <span class="error-message">Please select an address from the suggestions</span>
+                    </div>
 
-    <div class="form-group">
-        <label>Project Priorities</label>
-        <div class="checkbox-group">
-            <!-- Added name="priorities" -->
-            <label class="checkbox-item"><input type="checkbox" name="priorities" value="Security"> Security</label>
-            <label class="checkbox-item"><input type="checkbox" name="priorities" value="Lighting"> Lighting</label>
-            <label class="checkbox-item"><input type="checkbox" name="priorities" value="Climate"> Climate</label>
-            <label class="checkbox-item"><input type="checkbox" name="priorities" value="Audio"> Audio/Visual</label>
-        </div>
-    </div>
+                    <div class="form-group">
+                        <fieldset>
+                            <legend style="display: block; margin-bottom: 0.7rem; font-weight: 600; font-size: 0.9rem; color: var(--oakland-green);">Project Priorities</legend>
+                            <div class="checkbox-group">
+                                <label class="checkbox-item"><input type="checkbox" name="priorities" value="Security"> Security</label>
+                                <label class="checkbox-item"><input type="checkbox" name="priorities" value="Lighting"> Lighting</label>
+                                <label class="checkbox-item"><input type="checkbox" name="priorities" value="Climate"> Climate</label>
+                                <label class="checkbox-item"><input type="checkbox" name="priorities" value="Audio/Visual"> Audio/Visual</label>
+                            </div>
+                        </fieldset>
+                    </div>
 
-    <div class="form-group">
-        <label>Preferred Ecosystem</label>
-        <!-- Added name="ecosystem" -->
-        <select name="ecosystem">
-            <option value="Apple">Apple HomeKit</option>
-            <option value="Google">Google Home</option>
-            <option value="Amazon">Amazon Alexa / Matter</option>
-            <option value="Unsure">Unsure / Need Advice</option>
-        </select>
-    </div>
+                    <div class="form-group">
+                        <label for="formEcosystem">Preferred Ecosystem</label>
+                        <select id="formEcosystem" name="ecosystem" required>
+                            <option value="">Select an option</option>
+                            <option value="Apple">Apple HomeKit</option>
+                            <option value="Google">Google Home</option>
+                            <option value="Amazon">Amazon Alexa / Matter</option>
+                            <option value="Unsure">Unsure / Need Advice</option>
+                        </select>
+                        <span class="error-message">Please select a preferred ecosystem</span>
+                    </div>
 
-    <div class="form-group">
-        <label>Message/Goals</label>
-        <!-- Added name="message" -->
-        <textarea name="message" rows="4" placeholder="Tell us about your home..."></textarea>
-    </div>
+                    <div class="form-group">
+                        <label for="formMessage">Message/Goals</label>
+                        <textarea id="formMessage" name="message" rows="4" placeholder="Tell us about your home..."></textarea>
+                    </div>
 
-    <!-- This hidden field prevents spam bots from filling out your form -->
-    <input type="text" name="_gotcha" style="display:none">
+                    <!-- This hidden field prevents spam bots from filling out your form -->
+                    <input type="text" name="_gotcha" style="display:none">
 
-    <button type="submit" class="btn" style="width: 100%; margin-top: 1.5rem;">Send Inquiry</button>
-</form>
+                    <button type="submit" id="submitBtn" class="btn" style="width: 100%; margin-top: 1.5rem;">Send Inquiry</button>
+                </form>
             </div>
         </div>
     </section>
@@ -379,7 +448,7 @@
             <div class="logo" style="margin-bottom: 1rem;">East Bay Smart Home Design</div>
             <p style="opacity: 0.6;">Specializing in Rockridge, Montclair, and the Berkeley Hills.</p>
             <div class="footer-legal">
-                <p>East Bay Smart Home Design provides independent technology consulting. We are not a licensed C-7 low-voltage contractor and do not provide physical electrical or hardware installation services. All "Blueprints" are intended as architectural guides for homeowner or third-party professional implementation.</p>
+                <p>East Bay Smart Home Design provides independent technology consulting. We are not a licensed C-7 low-voltage contractor and do not provide physical electrical or hardware installation labor.</p>
             </div>
         </div>
     </footer>
@@ -387,11 +456,17 @@
     <script>
         const addressInput = document.getElementById('addressInput');
         const resultsContainer = document.getElementById('autocomplete-list');
+        const leadForm = document.getElementById('leadForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const formFeedback = document.getElementById('formFeedback');
         let debounceTimer;
+        let selectedAddress = false;
 
+        // Address autocomplete
         addressInput.addEventListener('input', function() {
             clearTimeout(debounceTimer);
             const query = this.value;
+            selectedAddress = false;
 
             if (query.length < 4) {
                 resultsContainer.style.display = 'none';
@@ -400,16 +475,21 @@
 
             debounceTimer = setTimeout(() => {
                 // We use Photon API (OpenStreetMap)
-                // lon -122.27, lat 37.87 is the Berkeley/Oakland center for bias
+                // lat 37.87, lon -122.27 is the Berkeley/Oakland center for bias
                 const url = `https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&lat=37.8715&lon=-122.2730&limit=5`;
 
                 fetch(url)
-                    .then(response => response.json())
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Address lookup failed');
+                        }
+                        return response.json();
+                    })
                     .then(data => {
                         resultsContainer.innerHTML = '';
-                        if (data.features.length > 0) {
+                        if (data.features && data.features.length > 0) {
                             resultsContainer.style.display = 'block';
-                            data.features.forEach(feature => {
+                            data.features.forEach((feature, index) => {
                                 const props = feature.properties;
                                 const addressLabel = [props.name, props.street, props.city, props.state]
                                     .filter(Boolean)
@@ -417,25 +497,117 @@
                                 
                                 const div = document.createElement('div');
                                 div.classList.add('autocomplete-item');
+                                div.setAttribute('role', 'option');
+                                div.setAttribute('tabindex', '0');
                                 div.textContent = addressLabel;
                                 div.addEventListener('click', () => {
-                                    addressInput.value = addressLabel;
-                                    resultsContainer.style.display = 'none';
+                                    selectAddress(addressLabel);
+                                });
+                                div.addEventListener('keydown', (e) => {
+                                    if (e.key === 'Enter' || e.key === ' ') {
+                                        e.preventDefault();
+                                        selectAddress(addressLabel);
+                                    }
                                 });
                                 resultsContainer.appendChild(div);
                             });
                         } else {
-                            resultsContainer.style.display = 'none';
+                            resultsContainer.innerHTML = '<div class="autocomplete-item-error">No addresses found. Try a different search.</div>';
+                            resultsContainer.style.display = 'block';
                         }
+                    })
+                    .catch(error => {
+                        console.error('Address lookup error:', error);
+                        resultsContainer.innerHTML = '<div class="autocomplete-item-error">Address lookup unavailable. Please try again.</div>';
+                        resultsContainer.style.display = 'block';
                     });
             }, 300);
         });
 
+        function selectAddress(address) {
+            addressInput.value = address;
+            selectedAddress = true;
+            resultsContainer.style.display = 'none';
+            addressInput.focus();
+        }
+
         // Close dropdown when clicking outside
         document.addEventListener('click', function(e) {
-            if (e.target !== addressInput) {
+            if (e.target !== addressInput && !resultsContainer.contains(e.target)) {
                 resultsContainer.style.display = 'none';
             }
+        });
+
+        // Form validation and submission
+        leadForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // Clear previous feedback
+            formFeedback.className = 'form-feedback';
+            formFeedback.textContent = '';
+
+            // Validate all fields
+            let isValid = true;
+            const formGroups = leadForm.querySelectorAll('.form-group');
+
+            formGroups.forEach(group => {
+                group.classList.remove('error');
+                const input = group.querySelector('input, select, textarea');
+                if (!input) return;
+
+                let fieldValid = true;
+                if (input.type === 'email') {
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    fieldValid = emailRegex.test(input.value.trim());
+                } else if (input.id === 'addressInput') {
+                    fieldValid = selectedAddress && input.value.trim().length > 0;
+                } else if (input.required) {
+                    fieldValid = input.value.trim().length > 0;
+                }
+
+                if (!fieldValid) {
+                    group.classList.add('error');
+                    isValid = false;
+                }
+            });
+
+            if (!isValid) {
+                formFeedback.classList.add('error');
+                formFeedback.textContent = 'Please fill in all required fields correctly.';
+                return;
+            }
+
+            // Disable submit button and show loading state
+            submitBtn.disabled = true;
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Sending...';
+
+            // Submit form programmatically
+            const formData = new FormData(leadForm);
+            fetch(leadForm.action, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (response.ok) {
+                    formFeedback.classList.add('success');
+                    formFeedback.textContent = '✓ Message sent! We\'ll be in touch soon.';
+                    leadForm.reset();
+                    selectedAddress = false;
+                    resultsContainer.style.display = 'none';
+                } else {
+                    throw new Error('Form submission failed');
+                }
+            })
+            .catch(error => {
+                console.error('Form submission error:', error);
+                formFeedback.classList.add('error');
+                formFeedback.textContent = 'There was an issue sending your message. Please try again.';
+            })
+            .finally(() => {
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalText;
+            });
         });
     </script>
 </body>
